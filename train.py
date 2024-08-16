@@ -18,6 +18,7 @@ import algorithms
 import misc
 from fast_data_loader import InfiniteDataLoader, FastDataLoader
 from torch.utils.data import TensorDataset
+from t-SNE_visualization import t_sne
 
 
 def get_model_input(data, sparse_features, dataset):
@@ -323,7 +324,7 @@ if __name__ == "__main__":
         for i, env in enumerate(tensor_datasets)
         if i not in args.test_envs
     ]
-
+    #x_for_tsne = [torch.tensor(domain)[torch.randperm(torch.tensor(domain).size(0))[:2000]] for domain in train_data_list] #for t-SNE
     val_tensor_datasets = [dataframe_to_tensordataset(env, i, "val") for i, env in enumerate(val_data_list)]
     eval_loaders = [FastDataLoader(
         dataset=env,
@@ -364,7 +365,7 @@ if __name__ == "__main__":
         algorithm.load_state_dict(algorithm_dict)
 
     algorithm.to(device)
-
+    #t_sne(algorithm,x_for_tsne)  #for t-SNE
     train_minibatches_iterator = zip(*train_loaders)
 
     checkpoint_vals = collections.defaultdict(lambda: [])
